@@ -1,237 +1,213 @@
+```markdown
 # Pipeline de Données Météorologiques avec Dagster
 
 ## Vue d'ensemble
 Ce projet implémente une pipeline de données de bout en bout utilisant Dagster comme orchestrateur, suivant l'approche ELT (Extract, Load, Transform) pour récupérer, stocker, transformer et visualiser des données météorologiques de villes françaises représentant différentes régions.
 
+---
+
 ## Architecture
-                 ┌──────────────┐
-                 │    API       │
-                 │  Open-Meteo  │
-                 └──────┬───────┘
-                        │
-                        ▼
+```
+                ┌──────────────┐
+                │    API       │
+                │  Open-Meteo  │
+                └──────┬───────┘
+                       │
+                       ▼
 ┌─────────────┐      ┌──────────────┐     ┌────────────┐
 │   Dagster   │◄─────┤  Extraction  │     │  Schedule  │
 │ Orchestrator│      │    Assets    │◄────┤  Sensors   │
 └──────┬──────┘      └──────┬───────┘     └────────────┘
-│                    │
-│             ┌──────▼───────┐
-│             │   DuckDB     │
-│             │  Database    │
-│             └──────┬───────┘
-│                    │
-│             ┌──────▼───────┐
-└────────────►│     dbt      │
-│ Transformations│
-└──────┬───────┘
-│
-▼
-┌──────────────┐
-│   Power BI   │
-│ Visualisations│
-└──────────────┘
+       │                    │
+       │             ┌──────▼───────┐
+       │             │   DuckDB     │
+       │             │  Database    │
+       │             └──────┬───────┘
+       │                    │
+       │             ┌──────▼───────┐
+       └────────────►│     dbt      │
+                      │ Transformations │
+                      └──────┬───────┘
+                             │
+                             ▼
+                      ┌──────────────┐
+                      │   Power BI   │
+                      │ Visualisations│
+                      └──────────────┘
+```
+
+---
 
 ## Fonctionnalités principales
 
-- **Extraction des données**: Récupération des données météorologiques pour 15 villes françaises via l'API Open-Meteo
-- **Stockage**: Persistance des données dans DuckDB, base de données analytique légère et performante
-- **Transformation**: Utilisation de dbt pour structurer et transformer les données
-- **Visualisation**: Tableaux de bord Power BI avec analyses avancées et indices personnalisés
-- **Orchestration**: Pipeline complet avec assets, jobs, schedules et sensors dans Dagster
-- **Enrichissement des données**: Calcul d'indices météorologiques comme l'indice de confort thermique
+- **Extraction des données** : récupération des données météo (température, humidité, vent…) pour 15 villes françaises via l’API Open‑Meteo.  
+- **Stockage** : persistance des données dans DuckDB, base analytique légère et rapide.  
+- **Transformation** : utilisation de dbt pour structurer, nettoyer et enrichir les données.  
+- **Visualisation** : tableaux de bord Power BI interactifs avec analyses avancées et indicateurs personnalisés.  
+- **Orchestration** : assets, jobs, schedules et sensors définis dans Dagster pour automatiser le flux ELT.  
+- **Enrichissement** : calcul d’indices météo (confort thermique, alertes canicule/inondation).
+
+---
 
 ## Structure du projet
+
+```
 dagster_pipeline/
 ├── dagster_home/           # Configuration Dagster
 │   └── dagster.yaml
-├── pipeline/               # Code source Dagster
-│   ├── init.py         # Définitions des assets et jobs
-│   ├── assets.py           # Définition des assets individuels
-│   ├── resources.py        # Configuration des ressources (API, DB)
+├── pipeline/               # Code Dagster
+│   ├── __init__.py         # Définitions des assets & jobs
+│   ├── assets.py           # Définition des assets
+│   ├── resources.py        # Ressources API & DB
 │   ├── jobs.py             # Définition des jobs
-│   ├── schedules.py        # Planifications d'exécution
-│   └── sensors.py          # Capteurs pour déclenchements conditionnels
-├── warehouse/              # Stockage et transformation
-│   ├── data/               # Données DuckDB et exports CSV
+│   ├── schedules.py        # Planifications d’exécution
+│   └── sensors.py          # Capteurs conditionnels
+├── warehouse/              # Stockage & transformation
+│   ├── data/               # DuckDB & exports CSV
 │   └── dbt_project/        # Projet dbt
-│       ├── models/         # Modèles SQL dbt
+│       ├── models/
 │       │   ├── staging/    # Modèles de préparation
 │       │   └── mart/       # Modèles finaux
-│       ├── dbt_project.yml # Configuration dbt
-│       └── profiles.yml    # Connexion à la base de données
-└── visualisations/         # Fichiers Power BI
+│       ├── dbt_project.yml # Config dbt
+│       └── profiles.yml    # Connexion DB
+└── visualisations/         # Fichiers Power BI (.pbix)
+```
+
+---
 
 ## Pipeline Dagster en détail
 
 ### Assets
-Notre pipeline est construite autour du concept d'assets Dagster, qui représentent les données produites à chaque étape:
 
-1. **city_list**: Liste de 15 villes françaises représentant différentes régions
-   - Couvre les principales régions de France
-   - Inclut les métadonnées de région pour l'analyse
+1. **city_list**  
+   - Liste de 15 villes françaises couvrant différentes régions.
 
-2. **raw_weather_data**: Données météorologiques brutes extraites de l'API
-   - Température, humidité, précipitations, vitesse du vent
-   - Format JSON structuré avec horodatage
+2. **raw_weather_data**  
+   - Données brutes JSON : température, humidité, précipitations, vent, horodatage.
 
-3. **processed_weather_tables**: Tables structurées pour analyse
-   - `current_weather_table`: Conditions météorologiques actuelles
-   - `forecast_weather_table`: Prévisions météorologiques
+3. **processed_weather_tables**  
+   - `current_weather_table` : données actuelles.  
+   - `forecast_weather_table` : prévisions.
 
-4. **weather_dbt_models**: Exécution des modèles dbt pour transformation avancée
-   - Agrégation par région
-   - Calcul de statistiques et KPIs
+4. **weather_dbt_models**  
+   - Exécution des modèles dbt pour agrégation par région et calcul de KPIs.
 
 ### Jobs
-Nos jobs définissent les workflows complets et partiels:
 
-1. **weather_pipeline_job**: Pipeline complet d'extraction, stockage et transformation
-2. **extract_data_job**: Exécution uniquement de l'extraction des données
-3. **transform_data_job**: Exécution uniquement des transformations
-4. **dbt_job**: Exécution des modèles dbt
+- **weather_pipeline_job** : pipeline complète (extract → load → transform).  
+- **extract_data_job** : extraction seule.  
+- **transform_data_job** : transformations seules.  
+- **dbt_job** : exécution des modèles dbt.
 
 ### Automatisation
-L'automatisation est un point fort de notre projet:
 
-- **Schedules**: 
-  - Exécution quotidienne à 8h00 pour les données actuelles
-  - Exécution hebdomadaire le lundi à 6h00 pour le rapport complet
+- **Schedules**  
+  - Quotidienne à 08h00 (données actuelles).  
+  - Hebdomadaire lundi 06h00 (rapport complet).
 
-- **Sensors**: 
-  - Détection de températures supérieures à 30°C pour alertes canicule
-  - Surveillance des précipitations importantes (>5mm) pour alertes inondation
+- **Sensors**  
+  - Températures > 30 °C → alerte canicule.  
+  - Précipitations > 5 mm → alerte inondation.
+
+---
 
 ## Modèles dbt
 
-Notre projet utilise dbt pour transformer les données brutes en modèles analytiques:
+- **stg_weather_data**  
+  - Standardisation et nettoyage des données brutes.
 
-1. **stg_weather_data**: 
-   - Standardisation des données météo brutes
-   - Nettoyage et validation des types
+- **weather_stats**  
+  - Agrégation par ville et région, calcul de moyennes, min/max, catégorisation température.
 
-2. **weather_stats**:
-   - Agrégation des statistiques par ville
-   - Calcul de moyennes, minimums et maximums par région
-   - Catégorisation des températures
+---
 
 ## Visualisations Power BI
 
-Nous avons développé plusieurs visualisations avancées:
+1. **Heatmap des températures par région**  
+2. **TreeMap hiérarchique (villes/régions)**  
+3. **Jauge confort thermique**  
+4. **Dashboard régional** (KPIs & évolution)
 
-1. **Carte de chaleur des températures par région**:
-   - Vue matricielle des températures avec code couleur
-   - Filtrage par catégorie de température
-
-2. **TreeMap hiérarchique**:
-   - Représentation des villes regroupées par région
-   - Taille des rectangles proportionnelle aux températures
-
-3. **Indice de confort thermique**:
-   - Visualisation composite prenant en compte température et humidité
-   - Jauge de confort pour comparaison rapide
-
-4. **Tableau de bord régional**:
-   - KPIs et statistiques par région
-   - Évolution des températures avec alertes
+---
 
 ## Installation
 
 ```bash
-# Sur Unix
+# Cloner le repo
+git clone https://github.com/votre-username/dagster_pipeline.git
+cd dagster_pipeline
+
+# Créer & activer venv
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+
+# Installer dépendances
+pip install -r requirements.txt
+
+# Configurer Dagster
+# Windows
+set DAGSTER_HOME=.\dagster_home
+# Linux/Mac
 export DAGSTER_HOME=./dagster_home
+```
 
-# Sur Windows
-set DAGSTER_HOME=./dagster_home
-Exécution
+---
 
-Lancer le serveur Dagster
-bashdagster dev
+## Exécution
 
-Accéder à l'interface Dagster
+```bash
+# Lancer Dagster
+python -m dagster dev
+```
 
-Ouvrir dans le navigateur: http://localhost:3000
+- Ouvrir `http://localhost:3000`.  
+- Dans **Jobs**, lancer `weather_pipeline_job`.  
+- Dans **Deployment → Schedules/Sensors**, activer selon besoins.
 
+Pour dbt (optionnel) :
 
-Exécuter la pipeline
+```bash
+cd warehouse/dbt_project
+dbt run --profiles-dir .
+```
 
-Naviguer vers l'onglet "Jobs"
-Sélectionner "weather_pipeline_job"
-Cliquer sur "Launch Run"
+Pour exporter CSV (Power BI) :
 
+```bash
+python export_csv.py
+```
 
-Activer les schedules et sensors
+---
 
-Aller dans "Deployment" > "Schedules" ou "Sensors"
-Activer les schedules ou sensors souhaités
+## Challenges & solutions
 
+- **Coordonnées villes** : dictionnaire statique pour éviter appel API tiers.  
+- **Intégration Dagster ↔ dbt** : asset dédié lançant `dbt run` via subprocess.  
+- **Dépendances assets** : `@multi_asset` et `required_resource_keys`.  
+- **Visualisation Power BI** : export CSV + colonnes calculées pour indices.
 
+---
 
-Fonctionnement détaillé de la pipeline
+## Perspectives d’évolution
 
-Extraction:
+- Migrer vers PostgreSQL pour gros volumes.  
+- Couvrir d’autres API (qualité de l’air, UV).  
+- Ajouter tests unitaires (pytest).  
+- Machine learning pour prévisions.  
+- Conteneurisation Docker/Kubernetes.  
+- Monitoring & alerting en temps réel.
 
-Les données météorologiques sont extraites de l'API Open-Meteo
-15 villes françaises représentant diverses régions climatiques
-Paramètres récupérés: température, humidité, précipitations, vent
+---
 
+## Auteurs
 
-Chargement:
+- Walid Fadi  
+- Ashraf Mesbahi  
 
-Les données sont stockées dans DuckDB
-Structure optimisée pour les requêtes analytiques
-Conservation de l'historique pour analyse temporelle
+## Licence
 
-
-Transformation:
-
-Les modèles dbt transforment les données brutes
-Enrichissement avec métadonnées régionales
-Calcul d'indices météorologiques personnalisés
-
-
-Visualisation:
-
-Power BI permet d'explorer et visualiser les données
-Création de tableaux de bord interactifs
-Filtres dynamiques par région et catégorie
-
-
-
-Challenges techniques et solutions
-
-Challenge: Accès aux coordonnées géographiques pour les villes
-Solution: Intégration d'un dictionnaire de coordonnées directement dans le code pour éviter des appels API supplémentaires
-Challenge: Intégration de Dagster avec dbt
-Solution: Création d'un asset spécifique qui encapsule l'exécution des modèles dbt via subprocess
-Challenge: Gestion des dépendances entre assets
-Solution: Utilisation du système de dépendances de Dagster et de l'approche multi_asset pour une meilleure traçabilité
-Challenge: Visualisation des données dans Power BI
-Solution: Export CSV des données transformées et création de colonnes calculées avancées comme l'indice de confort
-
-Perspectives d'amélioration
-
-Évolutivité: Migration vers une base de données plus robuste comme PostgreSQL pour gérer des volumes importants
-Qualité: Ajout de tests unitaires avec pytest pour garantir la fiabilité des transformations
-Richesse des données: Enrichissement avec d'autres sources comme la qualité de l'air ou les événements locaux
-Intelligence: Intégration d'un modèle de machine learning pour prédictions météorologiques personnalisées
-Déploiement: Conteneurisation avec Docker pour faciliter le déploiement dans différents environnements
-Monitoring: Mise en place d'alertes et de dashboards de monitoring pour la supervision de la pipeline
-
-Auteurs
-
-Walid Fadi
-Ashraf Mesbahi
-
-Licence
-Ce projet est sous licence MIT.
-
-Cette version enrichie comprend:
-- Une architecture visuelle plus détaillée
-- Une explication approfondie de chaque composant
-- Des détails sur les visualisations Power BI
-- Une description plus technique des challenges rencontrés
-- Une section plus développée sur le fonctionnement de la pipeline
-- Des perspectives d'amélioration plus élaborées
-- Une meilleure mise en page générale
-
-Cette documentation est maintenant beaucoup plus complète et professionnelle pour votre soutenance.
+MIT © 2025  
+```

@@ -20,25 +20,21 @@ Ce projet implémente une pipeline de données météorologiques utilisant Dagst
   * Vitesse du vent
 
 # 📂 Structure du Projet
-dagster_pipeline/
-├── pipeline/
-│   ├── init.py         # Définitions principales
-│   ├── assets.py           # Définition des assets
-│   ├── resources.py        # Ressources API
-│   ├── jobs.py             # Définition des jobs
-│   ├── schedules.py        # Planifications
-│   └── sensors.py          # Capteurs conditionnels
-│
-└── warehouse/
-└── dbt_project/
-├── models/
-│   ├── staging/
-│   │   └── stg_weather_data.sql
-│   └── mart/
-│       └── weather_stats.sql
-├── dbt_project.yml
-└── profiles.yml
 
+`dagster_pipeline/` ── `pipeline/` 
+- `__init__.py` : Définitions principales
+- `assets.py` : Définition des assets
+- `resources.py` : Ressources API
+- `jobs.py` : Définition des jobs 
+- `schedules.py` : Planifications
+- `sensors.py` : Capteurs conditionnels
+
+`warehouse/` ── `dbt_project/`
+- `models/`
+  - `staging/` : Modèles de préparation
+  - `mart/` : Modèles finaux
+- `dbt_project.yml` : Configuration projet
+- `profiles.yml` : Configuration connexion
 
 ## 🚀 Assets Dagster
 

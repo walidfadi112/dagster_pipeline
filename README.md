@@ -60,33 +60,38 @@ dagster_pipeline/
 
 ## 🛠️ Installation
 
+## 🛠 Installation
+
+### 1. Clonage du Repository
+
 ```bash
-# Cloner le repository
 git clone https://github.com/votre-username/dagster-weather-pipeline.git
-cd dagster-weather-pipeline
-
-# Créer un environnement virtuel
+2. Naviguer dans le dossier du projet
+bashcd dagster-weather-pipeline
+3. Créer un environnement virtuel
+bash# Pour Windows
 python -m venv venv
-source venv/bin/activate  # Sur Windows: venv\Scripts\activate
+venv\Scripts\activate
 
-# Installer les dépendances
-pip install -r requirements.txt
-🏃 Exécution
-bash# Lancer Dagster
-dagster dev
-🧪 Tests
-bash# Exécuter les tests
-pytest tests/
-📊 Visualisation
+# Pour macOS et Linux
+python3 -m venv venv
+source venv/bin/activate
+4. Mettre à jour pip
+bashpip install --upgrade pip
+5. Installer les dépendances
+bashpip install -r requirements.txt
+6. Configurer les variables d'environnement
+bash# Pour Windows
+set DAGSTER_HOME=.\dagster_home
 
-Exportation des données au format CSV
-Création de tableaux de bord avec Power BI
-
-🚧 Perspectives d'Amélioration
-
-Ajout de modèles prédictifs
-Intégration de plus de sources de données
-Amélioration des visualisations
+# Pour macOS et Linux
+export DAGSTER_HOME=./dagster_home
+7. Lancer Dagster
+bashdagster dev
+8. Exécuter les tests (optionnel)
+bashpytest tests/
+9. Exporter les données (optionnel)
+bashpython export_csv.py
 
 👥 Contributeurs
 

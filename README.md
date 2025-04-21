@@ -58,7 +58,6 @@ dagster_pipeline/
 - Alerte température (> 30°C)
 - Alerte précipitations (> 5mm)
 
-## 🛠️ Installation
 
 ## 🛠 Installation
 
@@ -88,5 +87,5 @@ pytest tests/
 9. Exporter les données (optionnel)
 python export_csv.py
 👥 Contributeurs
-
-Votre Nom
+-Ashraf Mesbahi
+-Walid Fadi

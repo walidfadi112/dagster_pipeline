@@ -62,31 +62,36 @@ Ce projet implémente une pipeline de données météorologiques utilisant Dagst
 
 ## 🛠 Installation
 
-### 1. Clonage du Repository
-1. Clonage du Repository
+## 🚀 Installation et Configuration du Projet
+
+### 1. 📥 Clonage du Repository
+```bash
 git clone https://github.com/votre-username/dagster-weather-pipeline.git
-2. Naviguer dans le dossier du projet
-cd dagster-weather-pipeline
-3. Créer un environnement virtuel (Windows)
-python -m venv venv
+2. 📂 Naviguer dans le dossier du projet
+bashcd dagster-weather-pipeline
+3. 🐍 Créer un environnement virtuel
+Pour Windows
+bashpython -m venv venv
 venv\Scripts\activate
-3. Créer un environnement virtuel (macOS et Linux)
-python3 -m venv venv
+Pour macOS et Linux
+bashpython3 -m venv venv
 source venv/bin/activate
-4. Mettre à jour pip
-pip install --upgrade pip
-5. Installer les dépendances
-pip install -r requirements.txt
-6. Configurer les variables d'environnement (Windows)
-set DAGSTER_HOME=.\dagster_home
-6. Configurer les variables d'environnement (macOS et Linux)
-export DAGSTER_HOME=./dagster_home
-7. Lancer Dagster
-dagster dev
-8. Exécuter les tests (optionnel)
-pytest tests/
-9. Exporter les données (optionnel)
-python export_csv.py
+4. 🔧 Mettre à jour pip
+bashpip install --upgrade pip
+5. 📦 Installer les dépendances
+bashpip install -r requirements.txt
+6. 🌐 Configurer les variables d'environnement
+Pour Windows
+bashset DAGSTER_HOME=.\dagster_home
+Pour macOS et Linux
+bashexport DAGSTER_HOME=./dagster_home
+7. 🏃 Lancer Dagster
+bashdagster dev
+8. 🧪 Exécuter les tests (optionnel)
+bashpytest tests/
+9. 💾 Exporter les données (optionnel)
+bashpython export_csv.py
+
 👥 Contributeurs
 -Ashraf Mesbahi
 -Walid Fadi

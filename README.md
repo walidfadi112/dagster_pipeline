@@ -19,7 +19,7 @@ Ce projet implémente une pipeline de données météorologiques utilisant Dagst
   * Précipitations
   * Vitesse du vent
 
-## 📂 Structure du Projet
+markdown## 📂 Structure du Projet
 dagster_pipeline/
 ├── pipeline/
 │   ├── init.py         # Définitions principales
@@ -28,10 +28,17 @@ dagster_pipeline/
 │   ├── jobs.py             # Définition des jobs
 │   ├── schedules.py        # Planifications
 │   └── sensors.py          # Capteurs conditionnels
+│
 └── warehouse/
-└── dbt_project/        # Projet dbt
+└── dbt_project/
 ├── models/
-└── dbt_project.yml
+│   ├── staging/
+│   │   └── stg_weather_data.sql
+│   └── mart/
+│       └── weather_stats.sql
+├── dbt_project.yml
+└── profiles.yml
+
 
 ## 🚀 Assets Dagster
 

@@ -19,7 +19,7 @@ Ce projet implémente une pipeline de données météorologiques utilisant Dagst
   * Précipitations
   * Vitesse du vent
 
-markdown## 📂 Structure du Projet
+# 📂 Structure du Projet
 dagster_pipeline/
 ├── pipeline/
 │   ├── init.py         # Définitions principales

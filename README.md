@@ -1,5 +1,3 @@
-Je vais améliorer le README pour qu'il reflète plus précisément votre projet actuel. Voici une version corrigée et plus fidèle :
-markdown# Pipeline de Données Météorologiques avec Dagster
 
 ## 🌦️ Vue d'ensemble
 Ce projet implémente une pipeline de données météorologiques utilisant Dagster comme orchestrateur, Open-Meteo API comme source de données, et dbt pour les transformations.

@@ -65,33 +65,81 @@ Ce projet implémente une pipeline de données météorologiques utilisant Dagst
 ## 🚀 Installation et Configuration du Projet
 
 ### 1. 📥 Clonage du Repository
+markdown## 🚀 Installation et Configuration du Projet
+
+### 1. 📥 Clonage du Repository
 ```bash
 git clone https://github.com/votre-username/dagster-weather-pipeline.git
+<details>
+<summary>Copier la commande</summary>
+git clone https://github.com/votre-username/dagster-weather-pipeline.git
+</details>
 2. 📂 Naviguer dans le dossier du projet
 bashcd dagster-weather-pipeline
+<details>
+<summary>Copier la commande</summary>
+cd dagster-weather-pipeline
+</details>
 3. 🐍 Créer un environnement virtuel
 Pour Windows
 bashpython -m venv venv
 venv\Scripts\activate
+<details>
+<summary>Copier les commandes</summary>
+python -m venv venv
+venv\Scripts\activate
+</details>
 Pour macOS et Linux
 bashpython3 -m venv venv
 source venv/bin/activate
+<details>
+<summary>Copier les commandes</summary>
+python3 -m venv venv
+source venv/bin/activate
+</details>
 4. 🔧 Mettre à jour pip
 bashpip install --upgrade pip
+<details>
+<summary>Copier la commande</summary>
+pip install --upgrade pip
+</details>
 5. 📦 Installer les dépendances
 bashpip install -r requirements.txt
+<details>
+<summary>Copier la commande</summary>
+pip install -r requirements.txt
+</details>
 6. 🌐 Configurer les variables d'environnement
 Pour Windows
 bashset DAGSTER_HOME=.\dagster_home
+<details>
+<summary>Copier la commande</summary>
+set DAGSTER_HOME=.\dagster_home
+</details>
 Pour macOS et Linux
 bashexport DAGSTER_HOME=./dagster_home
+<details>
+<summary>Copier la commande</summary>
+export DAGSTER_HOME=./dagster_home
+</details>
 7. 🏃 Lancer Dagster
 bashdagster dev
+<details>
+<summary>Copier la commande</summary>
+dagster dev
+</details>
 8. 🧪 Exécuter les tests (optionnel)
 bashpytest tests/
+<details>
+<summary>Copier la commande</summary>
+pytest tests/
+</details>
 9. 💾 Exporter les données (optionnel)
 bashpython export_csv.py
-
+<details>
+<summary>Copier la commande</summary>
+python export_csv.py
+</details>
 👥 Contributeurs
 -Ashraf Mesbahi
 -Walid Fadi
